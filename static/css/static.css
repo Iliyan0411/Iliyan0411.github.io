@@ -1,0 +1,31 @@
+body {
+  background-color: #f5eded;
+  margin: 10px;
+  font-family: monospace;
+}
+h1 {
+  text-align: center;
+}
+#guessed_word {
+  font-size: 40px;
+}
+#game {
+  position: relative;
+  margin-top: 8%;
+  text-align: center;
+}
+#stats {
+  display: inline-block;
+  border: 2px solid #496c6c;
+  padding: 7px;
+  border-radius: 7px;
+  background-color: rgba(244, 164, 96, 0.4);
+}
+#buttons {
+  position: relative;
+  margin-top: 30px;
+}
+#play_again {
+  position: relative;
+  margin-top: 20px;
+}
