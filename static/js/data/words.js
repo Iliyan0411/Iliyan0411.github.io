@@ -2,13 +2,11 @@ function Words() {
     var self = this;
 
     self.init = function () {
-        self.allWords = self.loadWords();
-
-        return self.getRandomWord();
+        self.loadWords();
     };
 
     self.loadWords = function () {
-        return function () {
+        self.allWords = function () {
             let temp;
 
             $.ajax({
@@ -26,11 +24,8 @@ function Words() {
     };
 
     self.getRandomWord = function () {
-        return self.allWords[Math.floor(Math.random() * self.allWords.length)]
+        return self.allWords[Math.floor(Math.random() * self.allWords.length)].toUpperCase();
     };
 
     self.init();
 }
-
-
-ko.applyBindings(new Words());

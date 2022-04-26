@@ -1,20 +1,3 @@
-const words = function () {
-    let temp;
-
-    $.ajax({
-        'async': false,
-        'type': "GET",
-        'global': false,
-        'url': "https://random-word-api.herokuapp.com/word?number=50",
-        'success': function (data) {
-            temp = data;
-        }
-    });
-
-    return temp;
-}();
-
-
 function HangmanViewModel() {
     var self = this;
 
@@ -22,7 +5,7 @@ function HangmanViewModel() {
     self.end = ko.observable(false);
 
     self.setAttributes = function(){
-        self.word = words[Math.floor(Math.random() * words.length)].toUpperCase();
+        self.word = new Words().getRandomWord();
         self.guessedLetters = Array(self.word.length).fill('_');
         self.guessedLettersCounter = 0;
         self.mistakesLeft = 6;
@@ -63,7 +46,7 @@ function HangmanViewModel() {
 
         self.guessLetter = function (guessedLetter) {
             if (self.guessedLetters.includes(guessedLetter)){
-                return self.getData("You have already find these letter.");
+                return self.getData("You have already found these letter.");
             }
             else if (String(self.word).includes(guessedLetter)) {
                 for (let i = 0; i < self.word.length; ++i) {
@@ -118,4 +101,4 @@ function HangmanViewModel() {
     self.init();
 }
 
-ko.applyBindings(new HangmanViewModel());
+ko.applyBindings(new HangmanViewModel(), document.getElementById("game"));

@@ -16,6 +16,17 @@
     <!-- Put your HTML here -->
     <h1>Welcome to Knockout JS Hangman!</h1>
 
+    <br><p id="greeting"></p>
+
+    <div id="user_credentials">
+        <form id="user_form" class="" data-bind="submit: getFormData">
+            <input id="first_name" type="text" name="First name" placeholder="First name" required /><br><br>
+            <input id="last_name" type="text" name="Last name" placeholder="Last name" required /><br><br>
+
+            <input id="submit_button" class="btn btn-primary" type="submit" value="Submit" />
+        </form>
+    </div>
+
     <div id="game" class="game-container">
         <p id="guessed_word" data-bind="text: data().guessedWord"></p>
 
@@ -29,10 +40,10 @@
                 <p data-bind="visible: !data().end">Used letters: <span data-bind="text: data().usedLetters"></span></p>
                 <p data-bind="text: data().message"></p>
                 <p>Money: <span data-bind="text: data().money + '$'"></span></p>
-            </div>
-        </div>
+            </div><br><br><br>
 
-        <button id="play_again" class="btn btn-primary btn-lg" data-bind="visible: data().end, click: playAgain">Play again</button>
+            <button id="play_again" class="btn btn-primary btn-lg" data-bind="visible: data().end, click: playAgain">Play again</button>
+        </div>
     </div>
 
 
@@ -40,12 +51,21 @@
             integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="static/js/libs/knockout-3.5.1.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script src="static/js/data/user.js"></script>
+    <script src="static/js/view-models/user.js"></script>
     <script src="static/js/utils.js"></script>
+    <script src="static/js/data/words.js"></script>
     <script src="static/js/view-models/hangman.js"></script>
-<!--    <script src="static/js/data/words.js"></script>-->
 
 
     <!-- Put your JS code here -->
-    <script type="text/javascript"></script>
+    <script type="text/javascript">
+        if(window.location.hash === "#game" && document.getElementById("greeting").innerText === ""){
+            window.location.hash = "";
+            window.history.replaceState("", "", location.pathname);
+            document.getElementById("game").style.display = "none";
+        }
+    </script>
 </body>
 </html>

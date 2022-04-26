@@ -6,26 +6,51 @@ body {
 h1 {
   text-align: center;
 }
+#greeting {
+  display: none;
+  padding: 6px;
+  background-color: rgba(92, 175, 175, 0.54);
+  border-radius: 10px 100px / 120px;
+  font-style: italic;
+  font-family: "Baskerville Old Face";
+  font-size: 22px;
+}
+#user_credentials {
+  display: inline-block;
+  padding: 50px;
+  margin-left: 40%;
+  margin-top: 10%;
+  background-color: #e7bd7f;
+  text-align: center;
+  font-size: 20px;
+  border-radius: 5px;
+  box-shadow: 7px 5px 5px grey;
+}
+#submit_button {
+  position: relative;
+  margin-left: 153px;
+  background-color: #4ba7ce;
+  color: #1e1c1c;
+}
 #guessed_word {
   font-size: 40px;
 }
 #game {
+  display: none;
   position: relative;
   margin-top: 8%;
   text-align: center;
 }
 #stats {
   display: inline-block;
+  background-color: rgba(244, 164, 96, 0.4);
   border: 2px solid #496c6c;
   padding: 7px;
   border-radius: 7px;
-  background-color: rgba(244, 164, 96, 0.4);
 }
 #buttons {
-  position: relative;
   margin-top: 30px;
 }
 #play_again {
-  position: relative;
   margin-top: 20px;
 }
