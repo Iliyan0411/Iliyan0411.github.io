@@ -14,41 +14,55 @@
 </head>
 <body>
     <!-- Put your HTML here -->
-    <h1>Welcome to Knockout JS Hangman!</h1>
+    <h1 class="mb-5 cent-content">Welcome to Knockout JS Hangman!</h1>
 
-    <br><p id="greeting"></p>
+    <div class="mb-5" data-bind="visible: selectedSection() === 'game', with: user">
+        <p class="greeting p-2 inl-bl midd-font-size mb-5" data-bind="text: 'Hi, ' + user.firstName() + ' ' + user.lastName() + '. Are you ready to play?'"></p>
+    </div>
 
-    <div id="user_credentials">
-        <form id="user_form" class="" data-bind="submit: getFormData">
-            <input id="first_name" type="text" name="First name" placeholder="First name" required /><br><br>
-            <input id="last_name" type="text" name="Last name" placeholder="Last name" required /><br><br>
+    <div class="cent-content" data-bind="visible: selectedSection() === 'user'">
+        <form class="submit-form inl-bl form-border midd-font-size">
+                <div data-bind="with: user">
+                    <input class="no-borders" placeholder="First name" required data-bind="value: user.firstName" /><br><br>
+                    <input class="no-borders" placeholder="Last name" required data-bind="value: user.lastName" /><br><br>
+                </div>
 
-            <input id="submit_button" class="btn btn-primary" type="submit" value="Submit" />
+                <button class="btn btn-primary btn-lg" data-bind="click: signedIn">Play</button>
         </form>
     </div>
 
-    <div id="game" class="game-container">
-        <p id="guessed_word" data-bind="text: data().guessedWord"></p>
+    <div class="cent-content" data-bind="visible: selectedSection() === 'game'">
+        <div data-bind="with: game">
+            <p class="display-3" data-bind="foreach: guessedLetters">
+                <span data-bind="text: letter"></span>
+            </p>
 
-        <div id="buttons" data-bind="visible: !data().end"></div>
+            <div class="mt-5" data-bind="foreach: alphabetButtons, visible: !end()">
+                <button class="midd-font-size btn btn-secondary mt-3" data-bind="click: function(alphabet) { $parent.guessLetter(alphabet['alphabet']) },
+                                    text: alphabet,
+                                    disable: clicked"></button>
+                <br data-bind="visible: alphabet === 'N'">
+            </div>
 
-        <div>
-            <div id="stats">
-                <p data-bind="visible: data().mistakesLeft !== 0 && !data().end">
-                    Mistakes left: <span data-bind="text: data().mistakesLeft, visible: data().mistakesLeft !== 0"></span>
-                </p>
-                <p data-bind="visible: !data().end">Used letters: <span data-bind="text: data().usedLetters"></span></p>
-                <p data-bind="text: data().message"></p>
-                <p>Money: <span data-bind="text: data().money + '$'"></span></p>
-            </div><br><br><br>
+            <div class="mt-5">
+                <div>
+                    <p data-bind="visible: !end()">Mistakes: <span data-bind="text: mistakes"></span></p>
+                    <p data-bind="visible: !end()">
+                        <span>Used letters: </span>
+                        <span data-bind="foreach: usedLetters">
+                                <span data-bind="text: '[' + letter + ']'"></span>
+                        </span>
+                    </p>
+                    <p data-bind="text: message"></p>
+                    <p>Money: <span data-bind="text: money() + '$'"></span></p>
+                </div>
 
-            <button id="play_again" class="btn btn-primary btn-lg" data-bind="visible: data().end, click: playAgain">Play again</button>
+                <button class="btn btn-primary btn-lg" data-bind="visible: end, click: playAgain">Play again</button>
+            </div>
         </div>
     </div>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="static/js/libs/knockout-3.5.1.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -57,15 +71,11 @@
     <script src="static/js/utils.js"></script>
     <script src="static/js/data/words.js"></script>
     <script src="static/js/view-models/hangman.js"></script>
+    <script src="static/js/view-models/main.js"></script>
 
 
     <!-- Put your JS code here -->
     <script type="text/javascript">
-        if(window.location.hash === "#game" && document.getElementById("greeting").innerText === ""){
-            window.location.hash = "";
-            window.history.replaceState("", "", location.pathname);
-            document.getElementById("game").style.display = "none";
-        }
     </script>
 </body>
 </html>

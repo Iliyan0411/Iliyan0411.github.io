@@ -1,104 +1,91 @@
+function randomMoney(maximum = 20) {
+    return Math.floor(Math.random() * maximum + 1);
+}
+
+function wrapAlphabets() {
+    return getAlphabet().map(function (alphabet) {
+        return {alphabet: alphabet, clicked: false};
+    });
+}
+
+
 function HangmanViewModel() {
     var self = this;
 
-    self.letter = ko.observable("");
-    self.end = ko.observable(false);
-
-    self.setAttributes = function(){
-        self.word = new Words().getRandomWord();
-        self.guessedLetters = Array(self.word.length).fill('_');
-        self.guessedLettersCounter = 0;
-        self.mistakesLeft = 6;
-        self.usedLetters = "";
-        self.money = 0;
-    }
-
-    self.setAttributes();
-
     self.init = function () {
-        const buttons = document.getElementsByClassName("btn btn-secondary");
-        for(let i = 0 ; i < buttons.length; ++i)
-        {
-            buttons[i].addEventListener("click", function()
-            {
-                if(!self.usedLetters.includes(buttons[i].value)) {
-                    self.usedLetters += buttons[i].value + ', ';
+        self.alphabetButtons = ko.observableArray(wrapAlphabets());
+
+        self.word = new Words().getRandomWord();
+        console.log(self.word);
+
+        self.guessedLetters = ko.observableArray(Array(self.word.length).fill({letter: '_'}));
+        self.usedLetters = ko.observableArray();
+        self.message = ko.observable("");
+        self.mistakes = ko.observable(0);
+        self.money = ko.observable(0);
+
+        self.end = ko.computed(function () {
+            return !self.guessedLetters().map(element => element['letter']).includes('_') || self.mistakes() >= 6;
+        }, self);
+
+
+        self.guessLetter = function (letter) {
+            const tempButtons = self.alphabetButtons().map(function (button) {
+                if (button['alphabet'] === letter) {
+                    return {alphabet: letter, clicked: true};
                 }
-                self.letter(buttons[i].value);
+
+                return button;
             });
-        }
+            self.alphabetButtons(tempButtons);
 
-        self.playAgain = function(){
-            self.end(false);
-            self.letter("");
-        }
+            self.usedLetters.push({letter: letter});
 
-        self.getData = function(message){
-            return {
-                "message": message,
-                "guessedWord": self.guessedLetters.reduce((a, b) => a + b + ' ', ''),
-                "mistakesLeft": self.mistakesLeft,
-                "money": self.money,
-                "usedLetters": self.usedLetters,
-                "end": self.end()
-                };
-        }
+            if (self.word.includes(letter)) {
+                for (let i in self.word) {
+                    if (self.word[i] === letter) {
+                        const tempLetters = self.guessedLetters();
+                        tempLetters[i] = {letter: letter};
+                        self.guessedLetters(tempLetters);
 
-        self.guessLetter = function (guessedLetter) {
-            if (self.guessedLetters.includes(guessedLetter)){
-                return self.getData("You have already found these letter.");
-            }
-            else if (String(self.word).includes(guessedLetter)) {
-                for (let i = 0; i < self.word.length; ++i) {
-                    if (self.word[i] === guessedLetter) {
-                        self.guessedLetters[i] = guessedLetter;
-                        self.money += Math.floor(Math.random() * 20 + 1);
-                        ++self.guessedLettersCounter;
+                        const tempMoney = self.money();
+                        self.money(tempMoney + randomMoney());
+
+                        if (self.end()) {
+                            self.message("You win");
+                            return;
+                        }
                     }
                 }
 
-                if (self.guessedLettersCounter === self.word.length) {
-                    self.end(true);
+                self.message("You find new letter");
+            } else {
+                self.mistakes(self.mistakes() + 1);
 
-                    return self.getData("You win!");
+                const tempMoney = self.money();
+                self.money(tempMoney - randomMoney(self.money() - 1));
+
+                if (self.mistakes() === 6) {
+                    self.message("You lose");
+                    return;
                 }
 
-                return self.getData("You find new letter!");
-            }
-            else {
-                if (--self.mistakesLeft === 0) {
-                    self.money = 0;
-                    self.end(true);
-
-                    return self.getData("You lose!");
-                }
-
-                self.money -= Math.floor(Math.random() * (self.money - 1) + 1);
-
-                return self.getData("Try again!");
+                self.message("Try again");
             }
         }
 
-        self.data = ko.computed(function () {
-            if(self.letter() === ""){
-                self.setAttributes();
-                console.log(self.word);
+        self.playAgain = function () {
+            self.word = new Words().getRandomWord();
+            console.log(self.word);
 
-                return {
-                    "message": "",
-                    "guessedWord": self.guessedLetters.reduce((a, b) => a + b + ' ', ''),
-                    "mistakesLeft": self.mistakesLeft,
-                    "money": self.money,
-                    "usedLetters": self.usedLetters,
-                    "end": self.end()
-                }
-            }
-
-            return self.guessLetter(self.letter());
-        }, self);
+            self.guessedLetters(Array(self.word.length).fill({letter: '_'}));
+            self.usedLetters([]);
+            self.message("");
+            self.mistakes(0);
+            self.money(0);
+            self.alphabetButtons(wrapAlphabets());
+        }
     }
 
     self.init();
 }
-
-ko.applyBindings(new HangmanViewModel(), document.getElementById("game"));
