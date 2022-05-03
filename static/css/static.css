@@ -3,7 +3,7 @@ body {
   margin: 10px;
   font-family: monospace;
 }
-.inl-bl {
+.inline {
   display: inline-block;
 }
 .cent-content {
@@ -21,10 +21,17 @@ body {
   border: none;
 }
 .greeting {
+  display: block;
   padding: 6px;
-  background-color: #e7bd7f;
-  border-radius: 10px 100px / 120px;
+  background-color: rgba(239, 205, 154, 0.69);
+  border-radius: 10px 10px / 12px;
 }
 .midd-font-size {
   font-size: 19px;
+}
+.bolded {
+  font-weight: bold;
+}
+.not-visible {
+  display: none;
 }

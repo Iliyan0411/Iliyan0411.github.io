@@ -16,12 +16,14 @@
     <!-- Put your HTML here -->
     <h1 class="mb-5 cent-content">Welcome to Knockout JS Hangman!</h1>
 
-    <div class="mb-5" data-bind="visible: selectedSection() === 'game', with: user">
-        <p class="greeting p-2 inl-bl midd-font-size mb-5" data-bind="text: 'Hi, ' + user.firstName() + ' ' + user.lastName() + '. Are you ready to play?'"></p>
+    <div class="mb-5 cent-content" data-bind="with: user">
+        <p id="greeting-container" class="not-visible greeting p-2 inline midd-font-size mb-5"
+           data-bind="text: 'Hi, ' + user.firstName() + ' ' + user.lastName() + '. Are you ready to play?'">
+        </p>
     </div>
 
     <div class="cent-content" data-bind="visible: selectedSection() === 'user'">
-        <form class="submit-form inl-bl form-border midd-font-size">
+        <form class="submit-form inline form-border midd-font-size">
                 <div data-bind="with: user">
                     <input class="no-borders" placeholder="First name" required data-bind="value: user.firstName" /><br><br>
                     <input class="no-borders" placeholder="Last name" required data-bind="value: user.lastName" /><br><br>
@@ -31,7 +33,7 @@
         </form>
     </div>
 
-    <div class="cent-content" data-bind="visible: selectedSection() === 'game'">
+    <div id="game-container" class="not-visible cent-content">
         <div data-bind="with: game">
             <p class="display-3" data-bind="foreach: guessedLetters">
                 <span data-bind="text: letter"></span>
@@ -44,16 +46,10 @@
                 <br data-bind="visible: alphabet === 'N'">
             </div>
 
-            <div class="mt-5">
+            <div class="mt-5 bolded">
                 <div>
-                    <p data-bind="visible: !end()">Mistakes: <span data-bind="text: mistakes"></span></p>
-                    <p data-bind="visible: !end()">
-                        <span>Used letters: </span>
-                        <span data-bind="foreach: usedLetters">
-                                <span data-bind="text: '[' + letter + ']'"></span>
-                        </span>
-                    </p>
                     <p data-bind="text: message"></p>
+                    <p data-bind="visible: !end()">Mistakes: <span data-bind="text: mistakes"></span></p>
                     <p>Money: <span data-bind="text: money() + '$'"></span></p>
                 </div>
 

@@ -8,6 +8,9 @@ function MainViewModel() {
 
         self.signedIn = function () {
             self.selectedSection('game');
+
+            document.getElementById('greeting-container').classList.remove('not-visible');
+            document.getElementById('game-container').classList.remove('not-visible');
         }
     }
 
